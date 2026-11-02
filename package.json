@@ -4,9 +4,13 @@
     "supertest": "^7.3.1"
   },
   "scripts": {
-    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand"
+    "test": "npm test --prefix backend && npm test --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "setup": "npm ci --ignore-scripts --prefix backend && npm ci --ignore-scripts --prefix frontend",
+    "start": "npm start --prefix backend"
   },
   "dependencies": {
     "@jest/globals": "^30.5.2"
   }
 }
+
