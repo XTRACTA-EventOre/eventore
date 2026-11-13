@@ -1,65 +1,80 @@
-# EventOre
+# EventOre — Frontend
 
-Proyecto universitario del equipo **XTRACTA** para una plataforma de trazabilidad mineral.
+Aplicación Vue/Vite de trazabilidad mineral del equipo XTRACTA. Incluye captura
+offline con IndexedDB, sincronización, sesiones y consulta QR. El remoto y el historial
+del repositorio se conservan. APIs, servicios, SQL, Docker/Compose y pruebas backend
+se mantienen en [eventore-platform](https://github.com/XTRACTA-EventOre/eventore-platform).
 
-## Estado del proyecto
+## Desarrollo independiente
 
-La rama `feature/microservices-avance3` propone la [separación desplegable de Identity y Traceability](docs/microservices.md) y un [texto verificable para Avance 3](docs/avance3-sprint2.md). Las capacidades funcionales de Sprint 2 siguen pendientes según ese documento.
+Requisito: Node.js 24.
 
-Sprint 1 integra registro de lotes, captura offline persistente, sincronización, idempotencia y consulta QR. Consulta [instalación, decisiones y aceptación](docs/sprint1-completion.md) antes de iniciar la demo. El workflow Sprint 1 acceptance verifica backend, frontend, PostgreSQL y navegador.
-
-## Stack previsto
-
-- Frontend: Vue.js y JavaScript.
-- Backend REST: Node.js y Express.js.
-- Autenticación Sprint 1: sesiones opacas HttpOnly; JWT y roles completos quedan para el módulo de identidad.
-- Persistencia: PostgreSQL.
-- Documentación de API: OpenAPI / Swagger.
-- Pruebas previstas: Jest, Supertest y Postman.
-
-Requisitos: Node 24 y PostgreSQL 16+. API documentada en /api/docs (Swagger requiere internet) y /api/v1/openapi.json. Los comandos de migración y creación de usuarios se describen en la guía de instalación.
-
-## GitFlow
-
-- `main`: versiones estables; rama principal del repositorio.
-- `develop`: integración del trabajo del equipo.
-- `feature/<descripcion>`: nace desde `develop` y se integra a `develop` mediante un pull request.
-- `release/<version>`: nace desde `develop`; al publicar se integra a `main` y a `develop`, y se etiqueta la versión en `main`.
-- `hotfix/<version>`: nace desde `main`; se integra a `main` y a `develop`.
-
-### Empezar una funcionalidad
-
-Sustituye `feature/mi-funcionalidad` por el nombre de la tarea asignada.
-
-```bash
+```sh
 git clone https://github.com/XTRACTA-EventOre/eventore.git
 cd eventore
 git switch develop
-git pull --ff-only origin develop
-git switch -c feature/mi-funcionalidad
+# Mientras el PR de separación esté abierto:
+# git switch feature/separate-frontend
+npm ci --ignore-scripts
+cp .env.example .env
+npm run dev
 ```
 
-Después de editar los archivos, revisa lo que vas a subir:
+En PowerShell usar `Copy-Item .env.example .env`. Abrir `http://localhost:5173`.
+La compilación y las pruebas unitarias funcionan sin instalar el backend.
+Para operaciones conectadas, arrancar Compose en el otro repositorio según su
+[README](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/independent-backend/README.md)
+y crear una cuenta en Identity. El gateway escucha en 3000.
 
-```bash
-git status
-git add ruta/al/archivo
-git diff --cached
-git commit -m "feat: describe la funcionalidad implementada"
-git push -u origin feature/mi-funcionalidad
+| Variable | Ejemplo | Uso |
+| --- | --- | --- |
+| VITE_API_BASE_URL | `/api` | Prefijo público usado por sesión, salud, sincronización y QR |
+| API_PROXY_TARGET | `http://localhost:3000` | Destino del proxy `/api` de Vite dev y preview |
+| APP_BASE_URL (en plataforma) | `http://localhost:5173` | Origen exacto del frontend para CORS, escrituras y enlaces QR |
+
+`VITE_*` se incluye en JavaScript público durante el build: no poner secretos ahí.
+Se recomienda conservar `/api` y publicar SPA y gateway bajo el mismo origen.
+Para una API absoluta del mismo sitio se admite `VITE_API_BASE_URL=http://localhost:3000/api`;
+el gateway permite credenciales solo desde APP_BASE_URL. Las cookies son HttpOnly y
+SameSite=Strict: dominios de sitios diferentes requieren otro diseño de cookies/CSRF.
+Usar siempre el mismo hostname (`localhost` en ambos procesos locales).
+
+## Compilación, offline y pruebas
+
+```sh
+npm test
+npm run build
+npm run preview -- --host 0.0.0.0 --port 4173
 ```
 
-En GitHub, abre un pull request con **base `develop`** y **compare `feature/mi-funcionalidad`**. Solicita una revisión a un compañero antes de integrarlo.
+Para demo offline configurar `APP_BASE_URL=http://localhost:4173` en la plataforma,
+recrear sus servicios y abrir `http://localhost:4173`. El service worker funciona en
+build/preview; la primera carga y el primer inicio de sesión requieren conexión.
+El frontend sirve también `/lots/:id`, la ruta codificada en los QR. En alojamiento
+estático configurar fallback a `index.html` y proxy `/api` al gateway; usar HTTPS,
+NODE_ENV=production en Identity y Cache-Control: no-cache para index.html y sw.js.
 
-### Convenciones
+Para aceptación real de navegador arrancar la plataforma con APP_BASE_URL en 4173,
+crear `demo@example.test` para el tenant `11111111-1111-4111-8111-111111111111`, definir
+BOOTSTRAP_PASSWORD temporalmente en el terminal de Playwright y ejecutar:
 
-Usar Conventional Commits: `feat:`, `fix:`, `docs:`, `test:`, `refactor:` y `chore:`. Cada commit debe representar un cambio coherente. Las versiones seguirán Semantic Versioning (`MAJOR.MINOR.PATCH`).
+```sh
+npx playwright install chromium
+npm run build
+npm run test:e2e
+```
 
-No subir secretos, credenciales, archivos `.env` ni `node_modules`. El archivo `.env.example`, cuando se añada, debe contener únicamente valores de ejemplo.
+Playwright arranca únicamente el preview frontend; la plataforma se inicia aparte.
+CI comprueba primero unidad/build sin backend y en otro job obtiene una revisión fija
+de eventore-platform para verificar en Chromium la captura offline, recarga,
+reconexión y consulta QR. No se copian fuentes backend al producto frontend.
 
-## Incorporación del equipo
+## Colaboración y alcance
 
-Las invitaciones de los tres compañeros quedan pendientes hasta contar con sus usuarios de GitHub. No hay invitaciones enviadas en esta inicialización.
-
-La revisión de pull requests es una convención de trabajo; no implica que haya reglas automáticas de protección configuradas.
-
+Trabajar en `feature/*` desde `develop` y abrir PR hacia `develop`. `main` y las ramas
+históricas permanecen intactas. Integrar primero el
+[PR backend #1](https://github.com/XTRACTA-EventOre/eventore-platform/pull/1).
+[Separación e historial](docs/repository-split.md),
+[aceptación Sprint 1](docs/sprint1-completion.md),
+[contrato API](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/independent-backend/docs/contracts/sprint1-api.md).
+Esta reorganización es previa al trabajo funcional e informe hasta Avance 4.

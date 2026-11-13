@@ -1,53 +1,62 @@
-name: Sprint 1 acceptance
+name: Frontend acceptance
 on:
   pull_request:
   push:
     branches: [develop]
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  acceptance:
+  frontend:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: eventore
-          POSTGRES_PASSWORD: test-only-password
-          POSTGRES_DB: eventore_test
-        ports: ['5432:5432']
-        options: >-
-          --health-cmd "pg_isready -U eventore -d eventore_test"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    env:
-      DATABASE_URL: postgres://eventore:test-only-password@localhost:5432/eventore_test
-      TEST_DATABASE_URL: postgres://eventore:test-only-password@localhost:5432/eventore_test
-      APP_BASE_URL: http://localhost:3000
-      BOOTSTRAP_PASSWORD: Sprint1-browser-test-password
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - run: npm ci --ignore-scripts --prefix backend
-      - run: npm ci --ignore-scripts --prefix frontend
-      - run: npm test --prefix backend
-      - run: npm test --prefix frontend
-      - run: npm run build --prefix frontend
-      - run: npm run migrate --prefix backend
-      - run: npm run migrate --prefix backend
-      - run: npm run user:create --prefix backend -- demo@example.test 11111111-1111-4111-8111-111111111111
-      - run: npm install --no-save --package-lock=false --ignore-scripts @playwright/test@1.56.1
-        working-directory: frontend
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: npm run build
+  browser-integration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      IDENTITY_DB_PASSWORD: local-ci-identity-password
+      TRACEABILITY_DB_PASSWORD: local-ci-traceability-password
+      INTERNAL_AUTH_SECRET: local-ci-long-shared-secret-change-in-production
+      APP_BASE_URL: http://localhost:4173
+      BOOTSTRAP_PASSWORD: Sprint1-browser-test-password
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: XTRACTA-EventOre/eventore-platform
+          # Reviewed backend PR #1 revision. Update through a PR when the API changes.
+          ref: 1f36dadbca325ca3166415b1902937139541db21
+          path: .platform
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run build
+      - run: docker compose up -d --build
+        working-directory: .platform
+      - run: docker compose exec -T -e BOOTSTRAP_PASSWORD identity node scripts/create-user.js demo@example.test 11111111-1111-4111-8111-111111111111
+        working-directory: .platform
       - run: npx playwright install --with-deps chromium
-        working-directory: frontend
-      - run: npx playwright test
-        working-directory: frontend
+      - run: npm run test:e2e
+      - if: always()
+        run: docker compose logs --no-color --tail=100
+        working-directory: .platform
+      - if: always()
+        run: docker compose down --volumes
+        working-directory: .platform
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: browser-failure
-          path: frontend/test-results/
+          path: test-results/

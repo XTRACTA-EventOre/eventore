@@ -1,15 +1,26 @@
 {
-  "devDependencies": {
-    "jest": "^30.5.2",
-    "supertest": "^7.3.1"
-  },
+  "name": "eventore",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "test": "npm test --prefix backend && npm test --prefix frontend",
-    "build": "npm run build --prefix frontend",
-    "setup": "npm ci --ignore-scripts --prefix backend && npm ci --ignore-scripts --prefix frontend",
-    "start": "npm start --prefix backend"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run tests",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@jest/globals": "^30.5.2"
+    "vue": "^3.5.42"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "fake-indexeddb": "^6.2.5",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.3"
+  },
+  "engines": {
+    "node": ">=24 <25"
   }
 }
