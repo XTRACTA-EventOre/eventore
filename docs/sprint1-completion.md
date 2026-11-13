@@ -18,8 +18,8 @@ sincronización vuelve a autorizarse en el backend. El tenant procede de la sesi
 
 `npm test` comprueba almacenamiento, reintentos y estados. `npm run test:e2e` usa
 Chromium y una plataforma provisionada por separado. El workflow de este repositorio
-inicia dos bases, servicios y gateway desde una revisión fija de la plataforma y
-conserva trazas de fallos. La regresión Jest/PostgreSQL y el smoke HTTP viven allí.
+inicia dos bases MySQL 8.4, servicios y gateway desde una revisión fija de la plataforma y
+conserva trazas de fallos. La regresión Jest/MySQL y el smoke HTTP viven allí.
 
 Demostración: login, desconectar, capturar, recargar, observar Pending, reconectar,
 observar Accepted, Ver lote y QR. El QR identifica un registro; no verifica autenticidad

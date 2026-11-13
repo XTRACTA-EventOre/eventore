@@ -33,8 +33,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: XTRACTA-EventOre/eventore-platform
-          # Reviewed backend PR #1 revision. Update through a PR when the API changes.
-          ref: 1f36dadbca325ca3166415b1902937139541db21
+          # MySQL backend PR #2 revision. Update through a PR when the API changes.
+          ref: ac4b5f3683b55b81293a2a5a8d56961c2872ba2d
           path: .platform
           persist-credentials: false
       - uses: actions/setup-node@v4
