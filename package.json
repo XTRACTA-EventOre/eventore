@@ -5,9 +5,9 @@
   },
   "scripts": {
     "test": "npm test --prefix backend && npm test --prefix frontend",
-    "build": "node init && npm run build --prefix frontend",
+    "build": "npm run build --prefix frontend",
     "setup": "npm ci --ignore-scripts --prefix backend && npm ci --ignore-scripts --prefix frontend",
-    "start": "node init && npm start --prefix backend"
+    "start": "npm start --prefix backend"
   },
   "dependencies": {
     "@jest/globals": "^30.5.2"
