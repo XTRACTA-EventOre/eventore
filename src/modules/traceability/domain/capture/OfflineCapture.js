@@ -5,6 +5,10 @@ export function createOfflineCapture({ tenantId,sourceId,payload,
     if (typeof payload.weight !== 'string' ||
         !/^(?:0|[1-9]\d*)(?:\.\d+)?$/.test(payload.weight) ||
         !/[1-9]/.test(payload.weight)) throw new Error('El peso debe ser positivo');
+    const [integer, fraction = ''] = payload.weight.split('.');
+    if (integer.length > 35 || fraction.length > 30) {
+        throw new Error('El peso admite hasta 35 dígitos enteros y 30 decimales');
+    }
     if (!['g','kg','t'].includes(payload.weightUnit)) throw new Error('Unidad inválida');
     if (!payload.originEvidence?.reference?.trim() ||
         !payload.originEvidence?.source?.trim()) throw new Error('Completa la evidencia');
