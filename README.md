@@ -23,7 +23,7 @@ npm run dev
 En PowerShell usar `Copy-Item .env.example .env`. Abrir `http://localhost:5173`.
 La compilación y las pruebas unitarias funcionan sin instalar el backend.
 Para operaciones conectadas, arrancar Compose en el otro repositorio según su
-[README](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/independent-backend/README.md)
+[README](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/mysql-database/README.md)
 y crear una cuenta en Identity. El gateway escucha en 3000.
 
 | Variable | Ejemplo | Uso |
@@ -73,8 +73,17 @@ reconexión y consulta QR. No se copian fuentes backend al producto frontend.
 
 Trabajar en `feature/*` desde `develop` y abrir PR hacia `develop`. `main` y las ramas
 históricas permanecen intactas. Integrar primero el
-[PR backend #1](https://github.com/XTRACTA-EventOre/eventore-platform/pull/1).
+[PR backend MySQL #2](https://github.com/XTRACTA-EventOre/eventore-platform/pull/2).
 [Separación e historial](docs/repository-split.md),
 [aceptación Sprint 1](docs/sprint1-completion.md),
-[contrato API](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/independent-backend/docs/contracts/sprint1-api.md).
+[contrato API](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/mysql-database/docs/contracts/sprint1-api.md).
 Esta reorganización es previa al trabajo funcional e informe hasta Avance 4.
+
+## Base de datos MySQL
+
+La plataforma usa MySQL 8.4 con bases y usuarios separados para Identity y Traceability.
+Vue sigue comunicándose solo por HTTP con el Gateway; no contiene credenciales SQL.
+El workflow de navegador fija una revisión MySQL del PR #2. La captura local valida
+el rango de peso admitido por la API (35 dígitos enteros y 30 decimales), conservando
+el valor como texto exacto. Las capturas anteriores permanecen guardadas.
+Consultar [configuración MySQL y datos anteriores](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/mysql-database/docs/mysql.md).

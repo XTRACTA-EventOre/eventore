@@ -31,3 +31,11 @@ el contrato. La unidad/build del frontend no necesitan ese checkout. La fuente d
 verdad de API es el OpenAPI de la plataforma. No se afirma que esta separación complete
 las historias de los Avances 3/4; los resultados de CI de estos PRs son evidencia de
 regresión y separación, no del producto completo.
+
+## Cambio posterior a MySQL
+
+El [PR backend #2](https://github.com/XTRACTA-EventOre/eventore-platform/pull/2) sustituye
+PostgreSQL por MySQL 8.4 en la plataforma. El workflow frontend obtiene una revisión
+inmutable de ese PR y comprueba la misma API con MySQL. Integrar el backend #2 antes
+de este PR frontend. Los enlaces a #1 y al mapa de extracción anterior se conservan
+como evidencia histórica. No se ejecuta una conversión de datos existentes.
