@@ -12,9 +12,8 @@ Requisito: Node.js 24.
 ```sh
 git clone https://github.com/XTRACTA-EventOre/eventore.git
 cd eventore
-git switch develop
-# Mientras el PR funcional #27 esté abierto:
-# git switch feature/sprint2-access-custody
+git switch feature/sprint2-access-custody
+# Después de revisar e integrar el PR #27, usar develop.
 npm ci --ignore-scripts
 cp .env.example .env
 npm run dev
