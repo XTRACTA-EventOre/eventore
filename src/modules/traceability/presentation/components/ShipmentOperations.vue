@@ -50,7 +50,7 @@ async function retry(attempt){busy.value=true;error.value='';try{await retryOper
   <section class="lot-operations" aria-label="Transporte y recepción">
     <h3>Transporte y recepción</h3>
     <p v-if="error" class="alert error" role="alert">{{error}}</p><p v-if="notice" class="alert" role="status">{{notice}}</p>
-    <p v-for="attempt in pending.filter(p=>!p.action.startsWith('processing:'))" :key="attempt.key" class="alert">{{labels[attempt.action]??attempt.action}} sin confirmar. El reintento conserva los datos originales.
+    <p v-for="attempt in pending.filter(p=>Object.hasOwn(labels,p.action))" :key="attempt.key" class="alert">{{labels[attempt.action]??attempt.action}} sin confirmar. El reintento conserva los datos originales.
       <button type="button" :disabled="busy||!online" @click="retry(attempt)">Reintentar confirmación</button>
     </p>
     <template v-if="data">
