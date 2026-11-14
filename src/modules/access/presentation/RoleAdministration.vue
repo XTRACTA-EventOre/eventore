@@ -4,7 +4,7 @@ import { requestApi } from '../../../shared/infrastructure/http/apiClient.js';
 const emit = defineEmits(['changed']);
 const users = ref([]), catalog = ref({}), selectedUser = ref(''), selectedRoles = ref([]);
 const busy = ref(false), error = ref(''), notice = ref('');
-const labels = { Administrator: 'Administrador', Supervisor: 'Supervisor', Operator: 'Operador', Transporter: 'Transportista', Viewer: 'Consulta' };
+const labels = { Administrator: 'Administrador', Supervisor: 'Supervisor', Operator: 'Operador', Transporter: 'Transportista', Viewer: 'Consulta', PlantOperator: 'Planta', Jeweler: 'Joyería', Certifier: 'Revisor de certificados' };
 watch(selectedUser, id => { selectedRoles.value = [...(users.value.find(user => user.id === id)?.roles ?? [])]; notice.value = ''; });
 async function load() {
   try {

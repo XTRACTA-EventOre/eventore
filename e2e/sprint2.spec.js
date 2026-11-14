@@ -59,11 +59,11 @@ test('administración de roles, cancelación y aceptación de custodia desde QR'
   await page.goto(`/lots/${lotId}`);
   await expect(page.getByRole('button', { name: 'Aceptar custodia', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Aceptar custodia', exact: true }).click();
-  await expect(page.getByText('Custodia confirmada. El lote está en transporte.')).toBeVisible();
+  await expect(page.getByText('Custodia confirmada. Estado actual: InTransit.')).toBeVisible();
   await expect(page.locator('.lot dd').filter({ hasText: /^InTransit$/ })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Cancelar lote', exact: true })).toHaveCount(0);
   await page.reload();
-  await expect(page.getByText('Custodia confirmada. El lote está en transporte.')).toBeVisible();
+  await expect(page.getByText('Custodia confirmada. Estado actual: InTransit.')).toBeVisible();
   await expect(page.getByText('Custodia aceptada', { exact: true })).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath('custody-confirmed.png'), fullPage: true });
   await page.goto(`/lots/${cancelledId}`);

@@ -23,7 +23,7 @@ watch(() => can('lots.release'), async allowed => {
     <div class="sectionhead"><h3>Custodia e historial</h3>
       <button type="button" class="secondary" :disabled="!online || busy" @click="emit('refresh')">Actualizar lote</button>
     </div>
-    <p v-if="custody?.custody" class="alert">Custodia confirmada. El lote está en transporte.</p>
+    <p v-if="custody?.custody" class="alert">Custodia confirmada. Estado actual: {{custody.custody.status}}.</p>
     <p v-if="custody?.custody" class="identifier">Transportista: {{ custody.custody.custodianUserId === identity.userId ? identity.email : custody.custody.custodianUserId }}</p>
     <p v-for="restriction in operations?.restrictions ?? []" :key="restriction.id" class="alert error">Transferencia restringida: {{ restriction.reason }}</p>
 

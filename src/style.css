@@ -6,3 +6,7 @@
 .lot-operations form{margin:20px 0}.lot-operations h3{margin:0}
 .danger{background:#963e32;border-color:#963e32}.danger:hover{background:#793025}
 .history-list{padding-left:22px}.history-list li{padding:10px 0}.history-list p{margin:4px 0}
+
+.evidence-grid{display:flex;gap:12px;flex-wrap:wrap}.evidence-grid img{width:140px;height:110px;object-fit:contain;border:1px solid #dbe3e1;border-radius:8px}
+
+.workspace-nav{display:flex;flex-wrap:wrap;gap:.7rem;margin:1.2rem 0}.table-scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{text-align:left;padding:.8rem;border-bottom:1px solid #d8e3df;vertical-align:top}fieldset{border:1px solid #cbdad4;border-radius:.5rem;margin:1rem 0;padding:1rem}summary{cursor:pointer;font-weight:600;padding:1rem 0}.history-list .identifier{overflow-wrap:anywhere}.lot-operations form{margin-bottom:1.5rem}.public-verification{max-width:900px}
