@@ -40,7 +40,7 @@ jobs:
         with:
           repository: XTRACTA-EventOre/eventore-platform
           # Sprint 3 backend PR #4 revision. Update through a PR when the API changes.
-          ref: 62f45c066e0dbb59d8658fc865cc51d0f39012ce
+          ref: 59cd9d10ce4d0004d9e073d15e68d02838851066
           path: .platform
           persist-credentials: false
       - uses: actions/setup-node@v4

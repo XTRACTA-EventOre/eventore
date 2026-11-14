@@ -65,7 +65,7 @@ test('administración de roles, cancelación y aceptación de custodia desde QR'
   await page.reload();
   await expect(page.getByText('Custodia confirmada. Estado actual: InTransit.')).toBeVisible();
   await expect(page.getByText('Custodia aceptada', { exact: true })).toBeVisible();
-  await page.screenshot({ path: testInfo.outputPath('custody-confirmed.png'), fullPage: true });
+  await page.getByRole('region',{name:'Operaciones del lote'}).screenshot({ path: testInfo.outputPath('custody-confirmed.png') });
   await page.goto(`/lots/${cancelledId}`);
   await expect(page.getByRole('button', { name: 'Aceptar custodia', exact: true })).toHaveCount(0);
 });
@@ -89,5 +89,5 @@ test('respuesta perdida de aceptación se recupera sin duplicar la custodia', as
   await expect(page.getByText('Custodia aceptada', { exact: true })).toHaveCount(1);
   await page.reload();
   await expect(page.getByText('Custodia aceptada', { exact: true })).toHaveCount(1);
-  await page.screenshot({ path: testInfo.outputPath('custody-recovered.png'), fullPage: true });
+  await page.getByRole('region',{name:'Operaciones del lote'}).screenshot({ path: testInfo.outputPath('custody-recovered.png') });
 });
