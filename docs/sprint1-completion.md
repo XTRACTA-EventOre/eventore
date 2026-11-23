@@ -1,5 +1,8 @@
 # Aceptación frontend del Sprint 1
 
+Registro de una etapa previa. El alcance y las pruebas actuales se describen en la [guía de Avance 4](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/sprint2-access-custody/docs/avance4/testing-guide.md); las limitaciones históricas de este documento no sustituyen ese estado vigente.
+
+
 Alcance conservado: US12 (registro), US14 (captura persistente), US15 (sincronización),
 US16 (idempotencia/conflicto) y US17 (consulta QR).
 

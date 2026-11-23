@@ -12,9 +12,8 @@ Requisito: Node.js 24.
 ```sh
 git clone https://github.com/XTRACTA-EventOre/eventore.git
 cd eventore
-git switch develop
-# Mientras el PR de separación esté abierto:
-# git switch feature/separate-frontend
+git switch feature/sprint2-access-custody
+# Después de revisar e integrar el PR #27, usar develop.
 npm ci --ignore-scripts
 cp .env.example .env
 npm run dev
@@ -23,7 +22,7 @@ npm run dev
 En PowerShell usar `Copy-Item .env.example .env`. Abrir `http://localhost:5173`.
 La compilación y las pruebas unitarias funcionan sin instalar el backend.
 Para operaciones conectadas, arrancar Compose en el otro repositorio según su
-[README](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/mysql-database/README.md)
+[README](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/sprint2-access-custody/README.md)
 y crear una cuenta en Identity. El gateway escucha en 3000.
 
 | Variable | Ejemplo | Uso |
@@ -72,18 +71,25 @@ reconexión y consulta QR. No se copian fuentes backend al producto frontend.
 ## Colaboración y alcance
 
 Trabajar en `feature/*` desde `develop` y abrir PR hacia `develop`. `main` y las ramas
-históricas permanecen intactas. Integrar primero el
-[PR backend MySQL #2](https://github.com/XTRACTA-EventOre/eventore-platform/pull/2).
+históricas permanecen intactas. Revisar primero el
+[PR backend de Avance 4 #4](https://github.com/XTRACTA-EventOre/eventore-platform/pull/4).
 [Separación e historial](docs/repository-split.md),
 [aceptación Sprint 1](docs/sprint1-completion.md),
-[contrato API](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/mysql-database/docs/contracts/sprint1-api.md).
-Esta reorganización es previa al trabajo funcional e informe hasta Avance 4.
+[contrato API](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/sprint2-access-custody/docs/contracts/sprint1-api.md).
+El PR #27 incorpora los recorridos del Avance 4; la fusión queda sujeta a revisión.
 
 ## Base de datos MySQL
 
-La plataforma usa MySQL 8.4 con bases y usuarios separados para Identity y Traceability.
+La plataforma usa MySQL 8.4 con ocho bases y usuarios separados para cada servicio.
 Vue sigue comunicándose solo por HTTP con el Gateway; no contiene credenciales SQL.
-El workflow de navegador fija una revisión MySQL del PR #2. La captura local valida
+El workflow de navegador fija una revisión exacta del backend del PR #4. La captura local valida
 el rango de peso admitido por la API (35 dígitos enteros y 30 decimales), conservando
 el valor como texto exacto. Las capturas anteriores permanecen guardadas.
-Consultar [configuración MySQL y datos anteriores](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/mysql-database/docs/mysql.md).
+Consultar [configuración MySQL y datos anteriores](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/sprint2-access-custody/docs/mysql.md).
+
+
+## Recorridos del incremento
+
+El menú separa lotes/planta, joyería, certificados, dispositivos y reportes según permisos. La consulta pública se abre en `/verify/:certificateId`, sin sesión; usa vigencia actual y distingue declaración de evidencia revisada. Los enlaces de QR de lote usan `/lots/:lotId`. El servidor estático debe enviar ambas rutas a `index.html` y mantener `/api` dirigido al gateway.
+
+Consultar la [guía completa de pruebas y cuentas](https://github.com/XTRACTA-EventOre/eventore-platform/blob/feature/sprint2-access-custody/docs/avance4/testing-guide.md). Para la suite E2E completa se necesitan las ocho cuentas/roles indicados allí; cada ejecución usa datos desechables. Los videos, capturas, PDF y CSV se conservan como artifacts de GitHub Actions. La prueba utiliza enlaces codificados en QR; no se presenta como una prueba de cámara física.
