@@ -195,3 +195,6 @@ playwright-report/
 test-results/
 
 .platform/
+
+!.env.example
+!.env.compose.example
