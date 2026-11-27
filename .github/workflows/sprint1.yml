@@ -40,7 +40,7 @@ jobs:
         with:
           repository: XTRACTA-EventOre/eventore-platform
           # Backend Sprint 4 con migraciones y rutas GPS, ERP y facturación.
-          ref: 86d7476f1022875b402fdc9f892f0d97b40380b7
+          ref: 33b6279f737fbdf9e094eb0d2f654b82cad65da1
           path: .platform
           persist-credentials: false
       - uses: actions/setup-node@v4
