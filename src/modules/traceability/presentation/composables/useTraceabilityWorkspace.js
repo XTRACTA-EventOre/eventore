@@ -32,14 +32,14 @@ export function useTraceabilityWorkspace() {
     const sync=new SynchronizePendingCaptures({repository,api:createSynchronizationApi(),tenantId:identity.value.tenantId,sourceId});
     autoSync=startAutoSync({sync,onChange:()=>{void refresh().catch(showError);},onError:message=>{error.value=message;}});
   }
-  async function login(email,password){
+  async function login(email,password,code){
     busy.value=true;error.value='';
     try{
-      const result=await request('/api/v1/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+      const result=await request('/api/v1/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password,code})});
       identity.value=result.identity;sessionVerified.value=true;
       localStorage.setItem('eventore-last-identity',JSON.stringify(result.identity));
       await refresh();connectSync();if(routeLotId())await lookup(routeLotId());
-    }catch(e){showError(e);}finally{busy.value=false;}
+    }catch(e){showError(e);return e.code;}finally{busy.value=false;}
   }
   async function logout(){
     error.value='';
